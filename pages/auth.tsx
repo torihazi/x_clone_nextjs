@@ -3,21 +3,10 @@ import { Separator } from "@radix-ui/react-separator";
 import { Apple, Eye, EyeOff, Radius, X } from "lucide-react";
 import Image from "next/image";
 import { useDisclosure } from "@/hooks/use-disclosure";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { SignUpDialog } from "@/features/auth/sign-up-dialog";
 
 export default function Auth() {
   const { isOpen, setIsOpen, open, close, toggle } = useDisclosure();
-  const [isVisible, setIsVisible] = useState(true);
 
   return (
     <>
@@ -62,7 +51,7 @@ export default function Auth() {
                   >
                     メールアドレスで登録
                   </Button>
-                  <p className="text-sm text-gray-500 mb-3">
+                  <p className="text-sm text-gray-500 mb-3 w-[300px]">
                     アカウントを登録することにより、利用規約とプライバシーポリシー（Cookieの使用を含む）に同意したとみなされます。
                   </p>
                 </div>
@@ -70,7 +59,12 @@ export default function Auth() {
                   <p className="text-sm text-gray-500">
                     アカウントをお持ちの方はこちら
                   </p>
-                  <Button className="w-[300px] rounded-full">ログイン</Button>
+                  <Button
+                    variant="secondary"
+                    className="w-[300px] rounded-full text-sky-500 font-bold"
+                  >
+                    ログイン
+                  </Button>
                 </div>
               </div>
             </div>
@@ -88,97 +82,7 @@ export default function Auth() {
       </div>
 
       {/* ダイアログ */}
-      <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="p-1">
-          <div className="flex flex-col gap-2">
-            {/* header */}
-            <div className="flex justify-between items-center">
-              <Button
-                size="icon"
-                variant="ghost"
-                className="rounded-full p-1"
-                onClick={close}
-              >
-                <X className="w-10 h-10" />
-              </Button>
-              <div>
-                <Image src="/logo.svg" alt="logo" width={50} height={50} />
-              </div>
-              <div></div>
-            </div>
-            {/* body */}
-            <div className="flex flex-col gap-5 px-10">
-              <div className="text-3xl font-bold">アカウントを作成</div>
-              <div className="items-center gap-4">
-                <Label htmlFor="email" className="">
-                  メールアドレス
-                </Label>
-                <Input
-                  id="email"
-                  value=""
-                  className=""
-                  placeholder="example@gmail.com"
-                />
-              </div>
-              <div className="items-center gap-4">
-                <Label htmlFor="password" className="">
-                  パスワード
-                </Label>
-                <div className="relative">
-                  <Input
-                    id="password"
-                    value="@peduart"
-                    className=""
-                    type={isVisible ? "text" : "password"}
-                  />
-                  <Button
-                    size="icon"
-                    variant="ghost"
-                    className="absolute right-1 top-1/2 -translate-y-1/2 rounded-full"
-                    onClick={() => setIsVisible(!isVisible)}
-                  >
-                    {isVisible ? (
-                      <Eye className="w-5 h-5" />
-                    ) : (
-                      <EyeOff className="w-5 h-5" />
-                    )}
-                  </Button>
-                </div>
-              </div>
-              <div className="items-center gap-4">
-                <Label htmlFor="password_confirmation" className="">
-                  確認用パスワード
-                </Label>
-                <div className="relative">
-                  <Input
-                    id="password_confirmation"
-                    value="@peduart"
-                    className=""
-                    type={isVisible ? "text" : "password"}
-                  />
-                  <Button
-                    size="icon"
-                    variant="ghost"
-                    className="absolute right-1 top-1/2 -translate-y-1/2 rounded-full"
-                    onClick={() => setIsVisible(!isVisible)}
-                  >
-                    {isVisible ? (
-                      <Eye className="w-5 h-5" />
-                    ) : (
-                      <EyeOff className="w-5 h-5" />
-                    )}
-                  </Button>
-                </div>
-              </div>
-              <div className="flex justify-center items-center gap-4">
-                <Button className="w-[300px] rounded-full bg-sky-500 font-bold hover:bg-sky-600">
-                  アカウントを作成
-                </Button>
-              </div>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <SignUpDialog isOpen={isOpen} setIsOpen={setIsOpen} onClose={close} />
     </>
   );
 }
