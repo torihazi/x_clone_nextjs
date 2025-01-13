@@ -14,7 +14,7 @@ export default function Auth() {
         <div className="flex-1 flex">
           {/* ロゴ */}
           <div className="flex-1 flex justify-center items-center">
-            <Image src="/logo.svg" alt="logo" width={300} height={300} />
+            <Image src="/logo-white.png" alt="logo" width={300} height={300} />
           </div>
 
           {/* 入力フォーム */}

@@ -7,7 +7,7 @@ import { useState } from "react";
 import { PasswordInput } from "./password-input";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { signUp, SignUpSchema, SignUpSchemaType } from "@/lib/api/use-auth";
+import { signUp, SignUpSchema, SignUpSchemaType } from "@/lib/api/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
 
@@ -39,20 +39,20 @@ export const SignUpDialog = ({ isOpen, setIsOpen, onClose }: Props) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="p-1 h-[80vh]">
+      <DialogContent className="p-1 h-[80vh] overflow-y-auto">
         <div className="flex flex-col gap-2">
           {/* header */}
           <div className="flex justify-between items-center">
             <Button
               size="icon"
               variant="ghost"
-              className="rounded-full p-1"
+              className="rounded-full p-1 "
               onClick={onClose}
             >
-              <X className="w-10 h-10" />
+              <X className="w-10 h-10 text-foreground" />
             </Button>
-            <div>
-              <Image src="/logo.svg" alt="logo" width={50} height={50} />
+            <div className="flex-1 flex justify-center">
+              <Image src="/logo-black.png" alt="logo" width={30} height={30} />
             </div>
             <div></div>
           </div>
@@ -60,7 +60,7 @@ export const SignUpDialog = ({ isOpen, setIsOpen, onClose }: Props) => {
           <div className="grow flex flex-col px-10">
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="grow flex flex-col gap-5"
+              className="grow flex flex-col gap-5 text-foreground"
             >
               <div className="text-3xl font-bold">アカウントを作成</div>
               <div className="grow flex flex-col justify-between gap-4">
