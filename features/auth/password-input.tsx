@@ -23,6 +23,7 @@ export const PasswordInput = <T extends FieldValues>({
         />
         <Button
           size="icon"
+          type="button"
           variant="ghost"
           className="absolute right-1 top-1/2 -translate-y-1/2 rounded-full"
           aria-label={isVisible ? "パスワードを非表示" : "パスワードを表示"}

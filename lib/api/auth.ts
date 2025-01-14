@@ -29,9 +29,21 @@ export const signUp = async (data: SignUpForm) => {
   return response;
 };
 
-// export const useSignUp = ({data, config}: {data: SignUpSchemaType, config: SWRConfiguration}) => {
-//   const key = ["signUp"];
-//   const fetcher = () => signUpFetcher(data);
-//   const swr = useSWRMutation(key, fetcher);
-//   return swr;
-// };
+//
+// ログイン
+//
+
+export const SignInSchema = z.object({
+  email: z.string().email("不適なメールアドレスです"),
+  password: z.string().min(8, "パスワードは8文字以上で入力してください"),
+});
+
+export type SignInSchemaType = z.infer<typeof SignInSchema>;
+
+export const signIn = async (data: SignInSchemaType) => {
+  const response: AxiosResponse<User> = await authApiClient.post(
+    "/v1/users/sign_in",
+    data,
+  );
+  return response;
+};
