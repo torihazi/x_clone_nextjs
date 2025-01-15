@@ -1,12 +1,10 @@
 import { z } from "zod";
 import { authApiClient } from "./auth-api-client";
-import useSWR, { mutate, SWRConfiguration } from "swr";
-import useSWRMutation from "swr/mutation";
 import { AxiosResponse } from "axios";
 import { User } from "@/type/user";
-// 
+//
 // 新規登録
-// 
+//
 
 export const SignUpSchema = z
   .object({
@@ -26,7 +24,7 @@ export type SignUpSchemaType = z.infer<typeof SignUpSchema>;
 export const signUp = async (data: SignUpSchemaType) => {
   const response: AxiosResponse<User> = await authApiClient.post(
     "/v1/users",
-    data
+    data,
   );
   return response;
 };
@@ -37,4 +35,3 @@ export const signUp = async (data: SignUpSchemaType) => {
 //   const swr = useSWRMutation(key, fetcher);
 //   return swr;
 // };
-

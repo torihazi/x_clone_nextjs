@@ -1,10 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Separator } from "@radix-ui/react-separator";
-import { Apple, Eye, EyeOff, Radius, X } from "lucide-react";
+import { Apple, Radius } from "lucide-react";
 import Image from "next/image";
 import { useDisclosure } from "@/hooks/use-disclosure";
 import { SignUpDialog } from "@/features/auth/sign-up-dialog";
-
 export default function Auth() {
   const { isOpen, setIsOpen, open, close, toggle } = useDisclosure();
 

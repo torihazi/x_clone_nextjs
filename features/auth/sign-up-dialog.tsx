@@ -1,9 +1,8 @@
 import { Button } from "@/components/ui/button";
-import { X, Eye, EyeOff } from "lucide-react";
+import { X } from "lucide-react";
 import Image from "next/image";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
 import { PasswordInput } from "./password-input";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { SubmitHandler, useForm } from "react-hook-form";
