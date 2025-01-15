@@ -13,19 +13,19 @@ export const PasswordInput = <T extends FieldValues>({
   form,
   name,
 }: Props<T>) => {
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
   return (
     <>
       <div className="relative">
         <Input
           {...form.register(name)}
-          className=""
           type={isVisible ? "text" : "password"}
         />
         <Button
           size="icon"
           variant="ghost"
           className="absolute right-1 top-1/2 -translate-y-1/2 rounded-full"
+          aria-label={isVisible ? "パスワードを非表示" : "パスワードを表示"}
           onClick={() => setIsVisible(!isVisible)}
         >
           {isVisible ? (

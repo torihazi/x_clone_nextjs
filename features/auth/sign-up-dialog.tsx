@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { PasswordInput } from "./password-input";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { signUp, SignUpSchema, SignUpSchemaType } from "@/lib/api/auth";
+import { signUp, SignUpFormSchema, SignUpForm } from "@/lib/api/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
 
@@ -17,8 +17,8 @@ type Props = {
 };
 
 export const SignUpDialog = ({ isOpen, setIsOpen, onClose }: Props) => {
-  const form = useForm<SignUpSchemaType>({
-    resolver: zodResolver(SignUpSchema),
+  const form = useForm<SignUpForm>({
+    resolver: zodResolver(SignUpFormSchema),
     defaultValues: {
       email: "",
       password: "",
@@ -26,7 +26,7 @@ export const SignUpDialog = ({ isOpen, setIsOpen, onClose }: Props) => {
     },
   });
 
-  const onSubmit: SubmitHandler<SignUpSchemaType> = async (data) => {
+  const onSubmit: SubmitHandler<SignUpForm> = async (data) => {
     try {
       const response = await signUp(data);
       toast.success("認証メールを送信しました");
@@ -46,6 +46,7 @@ export const SignUpDialog = ({ isOpen, setIsOpen, onClose }: Props) => {
               size="icon"
               variant="ghost"
               className="rounded-full p-1 "
+              aria-label="閉じる"
               onClick={onClose}
             >
               <X className="w-10 h-10 text-foreground" />
@@ -100,6 +101,7 @@ export const SignUpDialog = ({ isOpen, setIsOpen, onClose }: Props) => {
                   <Button
                     className="w-[300px] rounded-full bg-sky-500 font-bold hover:bg-sky-600"
                     onClick={() => form.handleSubmit(onSubmit)}
+                    aria-label="アカウントを作成"
                   >
                     アカウントを作成
                   </Button>

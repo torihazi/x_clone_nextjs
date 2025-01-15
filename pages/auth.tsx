@@ -30,6 +30,7 @@ export default function Auth() {
                   <Button
                     variant="secondary"
                     className="w-[300px] rounded-full font-bold"
+                    aria-label="Googleで登録"
                   >
                     <Radius className="w-4 h-4" />
                     Google
@@ -37,6 +38,7 @@ export default function Auth() {
                   <Button
                     variant="secondary"
                     className="w-[300px] rounded-full font-bold"
+                    aria-label="Appleで登録"
                   >
                     <Apple className="w-4 h-4" />
                     Apple
@@ -47,6 +49,7 @@ export default function Auth() {
                   <Button
                     className="w-[300px] rounded-full bg-sky-500 font-bold hover:bg-sky-600"
                     onClick={open}
+                    aria-label="メールアドレスで登録"
                   >
                     メールアドレスで登録
                   </Button>
@@ -61,6 +64,7 @@ export default function Auth() {
                   <Button
                     variant="secondary"
                     className="w-[300px] rounded-full text-sky-500 font-bold"
+                    aria-label="ログイン"
                   >
                     ログイン
                   </Button>

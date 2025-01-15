@@ -6,7 +6,7 @@ import { User } from "@/type/user";
 // 新規登録
 //
 
-export const SignUpSchema = z
+export const SignUpFormSchema = z
   .object({
     email: z.string().email("不適なメールアドレスです"),
     password: z.string().min(8, "パスワードは8文字以上で入力してください"),
@@ -19,9 +19,9 @@ export const SignUpSchema = z
     path: ["password_confirmation"],
   });
 
-export type SignUpSchemaType = z.infer<typeof SignUpSchema>;
+export type SignUpForm = z.infer<typeof SignUpFormSchema>;
 
-export const signUp = async (data: SignUpSchemaType) => {
+export const signUp = async (data: SignUpForm) => {
   const response: AxiosResponse<User> = await authApiClient.post(
     "/v1/users",
     data,

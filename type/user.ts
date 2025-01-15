@@ -1,8 +1,6 @@
-export interface User {
-  id: number;
+import { BaseEntity } from "./base-entity";
+
+export interface User extends BaseEntity {
   name: string;
   email: string;
-
-  createdAt: string;
-  updatedAt: string;
 }
