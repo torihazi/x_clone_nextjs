@@ -4,11 +4,7 @@
     "plugin:tailwindcss/recommended",
     "plugin:jsx-a11y/recommended"
   ],
-  "plugins": [
-    "unused-imports",
-    "tailwindcss",
-    "jsx-a11y"
-  ],
+  "plugins": ["unused-imports", "tailwindcss", "jsx-a11y"],
   "rules": {
     "unused-imports/no-unused-imports": "error",
     "tailwindcss/classnames-order": "error",
