@@ -1,9 +1,20 @@
 {
-  "extends": ["next/core-web-vitals", "plugin:tailwindcss/recommended"],
-  "plugins": ["unused-imports", "tailwindcss"],
+  "extends": [
+    "next/core-web-vitals",
+    "plugin:tailwindcss/recommended",
+    "plugin:jsx-a11y/recommended"
+  ],
+  "plugins": [
+    "unused-imports",
+    "tailwindcss",
+    "jsx-a11y"
+  ],
   "rules": {
     "unused-imports/no-unused-imports": "error",
     "tailwindcss/classnames-order": "error",
-    "eol-last": ["error", "always"]
+    "eol-last": ["error", "always"],
+    "jsx-a11y/aria-props": "error",
+    "jsx-a11y/aria-proptypes": "error",
+    "jsx-a11y/aria-unsupported-elements": "error"
   }
 }

@@ -58,7 +58,8 @@ export const SignInDialog = ({ isOpen, setIsOpen, onClose }: Props) => {
             <Button
               size="icon"
               variant="ghost"
-              className="rounded-full p-1 "
+              className="rounded-full p-1"
+              aria-label="閉じる"
               onClick={onClose}
             >
               <X className="size-10 text-foreground" />
@@ -103,6 +104,7 @@ export const SignInDialog = ({ isOpen, setIsOpen, onClose }: Props) => {
                 <div className="mb-8 flex items-center justify-center">
                   <Button
                     className="w-[300px] rounded-full bg-sky-500 font-bold hover:bg-sky-600"
+                    aria-label="ログイン"
                     onClick={() => form.handleSubmit(onSubmit)}
                   >
                     ログイン
