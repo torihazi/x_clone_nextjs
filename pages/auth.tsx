@@ -78,7 +78,7 @@ export default function Auth() {
                   <Button
                     variant="secondary"
                     aria-label="ログイン"
-                    className="w-[300px] rounded-full text-sky-500 font-bold"
+                    className="w-[300px] rounded-full font-bold text-sky-500"
                     onClick={openSignIn}
                   >
                     ログイン
