@@ -32,7 +32,7 @@ export const SignUpDialog = ({ isOpen, setIsOpen, onClose }: Props) => {
       toast.success("認証メールを送信しました");
       console.log(response);
     } catch (error) {
-      console.log(error);
+      toast.error("アカウント作成に失敗しました");
     }
   };
 

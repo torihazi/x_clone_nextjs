@@ -45,7 +45,7 @@ export const SignInDialog = ({ isOpen, setIsOpen, onClose }: Props) => {
       toast.success("ログインしました");
       console.log(response);
     } catch (error) {
-      console.log(error);
+      toast.error("ログインに失敗しました");
     }
   };
 
