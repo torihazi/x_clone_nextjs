@@ -29,9 +29,9 @@ export const PasswordInput = <T extends FieldValues>({
           onClick={() => setIsVisible(!isVisible)}
         >
           {isVisible ? (
-            <Eye className="w-5 h-5" />
+            <Eye className="size-5" />
           ) : (
-            <EyeOff className="w-5 h-5" />
+            <EyeOff className="size-5" />
           )}
         </Button>
       </div>

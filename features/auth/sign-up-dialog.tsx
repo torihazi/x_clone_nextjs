@@ -38,10 +38,10 @@ export const SignUpDialog = ({ isOpen, setIsOpen, onClose }: Props) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="p-1 h-[80vh] overflow-y-auto">
+      <DialogContent className="h-[80vh] overflow-y-auto p-1">
         <div className="flex flex-col gap-2">
           {/* header */}
-          <div className="flex justify-between items-center">
+          <div className="flex items-center justify-between">
             <Button
               size="icon"
               variant="ghost"
@@ -49,21 +49,21 @@ export const SignUpDialog = ({ isOpen, setIsOpen, onClose }: Props) => {
               aria-label="閉じる"
               onClick={onClose}
             >
-              <X className="w-10 h-10 text-foreground" />
+              <X className="size-10 text-foreground" />
             </Button>
-            <div className="flex-1 flex justify-center">
+            <div className="flex flex-1 justify-center">
               <Image src="/logo-black.png" alt="logo" width={30} height={30} />
             </div>
             <div></div>
           </div>
           {/* body */}
-          <div className="grow flex flex-col px-10">
+          <div className="flex grow flex-col px-10">
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="grow flex flex-col gap-5 text-foreground"
+              className="flex grow flex-col gap-5 text-foreground"
             >
               <div className="text-3xl font-bold">アカウントを作成</div>
-              <div className="grow flex flex-col justify-between gap-4">
+              <div className="flex grow flex-col justify-between gap-4">
                 <div className="flex flex-col gap-8">
                   <div className="items-center gap-4">
                     <Label htmlFor="email" className="">
@@ -97,7 +97,7 @@ export const SignUpDialog = ({ isOpen, setIsOpen, onClose }: Props) => {
                     アカウントを登録することにより、利用規約とプライバシーポリシー（Cookieの使用を含む）に同意したとみなされます。
                   </div>
                 </div>
-                <div className="flex justify-center items-center mb-8">
+                <div className="mb-8 flex items-center justify-center">
                   <Button
                     className="w-[300px] rounded-full bg-sky-500 font-bold hover:bg-sky-600"
                     onClick={() => form.handleSubmit(onSubmit)}

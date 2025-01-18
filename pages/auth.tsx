@@ -9,30 +9,30 @@ export default function Auth() {
 
   return (
     <>
-      <div className="flex flex-col h-screen">
-        <div className="flex-1 flex">
+      <div className="flex h-screen flex-col">
+        <div className="flex flex-1">
           {/* ロゴ */}
-          <div className="flex-1 flex justify-center items-center">
+          <div className="flex flex-1 items-center justify-center">
             <Image src="/logo-white.png" alt="logo" width={300} height={300} />
           </div>
 
           {/* 入力フォーム */}
           <div className="flex-1 p-4">
-            <div className="flex flex-col p-4 h-full">
+            <div className="flex h-full flex-col p-4">
               <div className="my-10 text-6xl font-bold">
                 すべての話題が、ここに。
               </div>
-              <div className="text-4xl mb-5 font-bold">
+              <div className="mb-5 text-4xl font-bold">
                 今すぐ参加しましょう
               </div>
-              <div className="grow flex-1 flex flex-col gap-2 justify-between">
+              <div className="flex flex-1 grow flex-col justify-between gap-2">
                 <div className="flex flex-col gap-2">
                   <Button
                     variant="secondary"
                     className="w-[300px] rounded-full font-bold"
                     aria-label="Googleで登録"
                   >
-                    <Radius className="w-4 h-4" />
+                    <Radius className="size-4" />
                     Google
                   </Button>
                   <Button
@@ -40,10 +40,10 @@ export default function Auth() {
                     className="w-[300px] rounded-full font-bold"
                     aria-label="Appleで登録"
                   >
-                    <Apple className="w-4 h-4" />
+                    <Apple className="size-4" />
                     Apple
                   </Button>
-                  <Separator className="w-[300px] my-5 flex justify-center border-gray-500">
+                  <Separator className="my-5 flex w-[300px] justify-center border-gray-500">
                     または
                   </Separator>
                   <Button
@@ -53,17 +53,17 @@ export default function Auth() {
                   >
                     メールアドレスで登録
                   </Button>
-                  <p className="text-sm text-gray-500 mb-3 w-[300px]">
+                  <p className="mb-3 w-[300px] text-sm text-gray-500">
                     アカウントを登録することにより、利用規約とプライバシーポリシー（Cookieの使用を含む）に同意したとみなされます。
                   </p>
                 </div>
-                <div className="flex flex-col mt-5">
+                <div className="mt-5 flex flex-col">
                   <p className="text-sm text-gray-500">
                     アカウントをお持ちの方はこちら
                   </p>
                   <Button
                     variant="secondary"
-                    className="w-[300px] rounded-full text-sky-500 font-bold"
+                    className="w-[300px] rounded-full font-bold text-sky-500"
                     aria-label="ログイン"
                   >
                     ログイン
