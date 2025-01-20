@@ -2,15 +2,48 @@
   "extends": [
     "next/core-web-vitals",
     "plugin:tailwindcss/recommended",
-    "plugin:jsx-a11y/recommended"
+    "plugin:jsx-a11y/recommended",
+    "plugin:import/recommended"
   ],
-  "plugins": ["unused-imports", "tailwindcss", "jsx-a11y"],
+  "plugins": ["unused-imports", "tailwindcss", "jsx-a11y", "import"],
   "rules": {
     "unused-imports/no-unused-imports": "error",
     "tailwindcss/classnames-order": "error",
     "eol-last": ["error", "always"],
     "jsx-a11y/aria-props": "error",
     "jsx-a11y/aria-proptypes": "error",
-    "jsx-a11y/aria-unsupported-elements": "error"
+    "jsx-a11y/aria-unsupported-elements": "error",
+    "import/order": [
+      "warn",
+      {
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          "parent",
+          "sibling",
+          "index",
+          "object",
+          "type"
+        ],
+        "newlines-between": "always", // import groups の間 1行あける
+        "pathGroupsExcludedImportTypes": ["builtin"],
+        "alphabetize": { "order": "asc", "caseInsensitive": true }, // 大文字小文字関係なくアルファベット順にしたい
+        "pathGroups": [
+          { "pattern": "type/**", "group": "internal", "position": "before" },
+          {
+            "pattern": "features/**",
+            "group": "internal",
+            "position": "before"
+          },
+          {
+            "pattern": "components/**",
+            "group": "internal",
+            "position": "before"
+          },
+          { "pattern": "lib/**", "group": "internal", "position": "before" }
+        ]
+      }
+    ]
   }
 }

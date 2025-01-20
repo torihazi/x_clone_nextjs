@@ -1,17 +1,17 @@
-import { Button } from "@/components/ui/button";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { X } from "lucide-react";
 import Image from "next/image";
-import { Label } from "@/components/ui/label";
+import { useRouter } from "next/router";
+import { type SubmitHandler, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { SignInSchema, SignInSchemaType, signIn } from "@/lib/api/auth";
 
 import { PasswordInput } from "./password-input";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { SignInSchema, SignInSchemaType, signIn } from "@/lib/api/auth";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "react-toastify";
-import { useRouter } from "next/router";
-import jsCookie from "js-cookie";
 
 type Props = {
   isOpen: boolean;
@@ -32,15 +32,6 @@ export const SignInDialog = ({ isOpen, setIsOpen, onClose }: Props) => {
   const onSubmit: SubmitHandler<SignInSchemaType> = async (data) => {
     try {
       const response = await signIn(data);
-      // headerの設定
-      const token = response.headers["access-token"];
-      const client = response.headers["client"];
-      const uid = response.headers["uid"];
-      if (token && client && uid) {
-        jsCookie.set("access-token", token);
-        jsCookie.set("client", client);
-        jsCookie.set("uid", uid);
-      }
       router.push("/");
       toast.success("ログインしました");
       console.log(response);
@@ -79,13 +70,10 @@ export const SignInDialog = ({ isOpen, setIsOpen, onClose }: Props) => {
               <div className="flex grow flex-col justify-between gap-4">
                 <div className="flex flex-col gap-8">
                   <div className="items-center gap-4">
-                    <Label htmlFor="email" className="">
-                      メールアドレス
-                    </Label>
+                    <Label htmlFor="email">メールアドレス</Label>
                     <Input
                       id="email"
                       {...form.register("email")}
-                      className=""
                       placeholder="example@gmail.com"
                     />
                     {form.formState.errors.email && (
@@ -95,9 +83,7 @@ export const SignInDialog = ({ isOpen, setIsOpen, onClose }: Props) => {
                     )}
                   </div>
                   <div className="items-center gap-4">
-                    <Label htmlFor="password" className="">
-                      パスワード
-                    </Label>
+                    <Label htmlFor="password">パスワード</Label>
                     <PasswordInput form={form} name="password" />
                   </div>
                 </div>
@@ -105,7 +91,7 @@ export const SignInDialog = ({ isOpen, setIsOpen, onClose }: Props) => {
                   <Button
                     className="w-[300px] rounded-full bg-sky-500 font-bold hover:bg-sky-600"
                     aria-label="ログイン"
-                    onClick={() => form.handleSubmit(onSubmit)}
+                    type="submit"
                   >
                     ログイン
                   </Button>

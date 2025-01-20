@@ -1,14 +1,16 @@
-import { Button } from "@/components/ui/button";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { X } from "lucide-react";
 import Image from "next/image";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { PasswordInput } from "./password-input";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { signUp, SignUpFormSchema, SignUpForm } from "@/lib/api/auth";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { type SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { signUp, SignUpFormSchema, SignUpForm } from "@/lib/api/auth";
+
+import { PasswordInput } from "./password-input";
 
 type Props = {
   isOpen: boolean;
@@ -66,13 +68,10 @@ export const SignUpDialog = ({ isOpen, setIsOpen, onClose }: Props) => {
               <div className="flex grow flex-col justify-between gap-4">
                 <div className="flex flex-col gap-8">
                   <div className="items-center gap-4">
-                    <Label htmlFor="email" className="">
-                      メールアドレス
-                    </Label>
+                    <Label htmlFor="email">メールアドレス</Label>
                     <Input
                       id="email"
                       {...form.register("email")}
-                      className=""
                       placeholder="example@gmail.com"
                     />
                     {form.formState.errors.email && (
@@ -82,13 +81,11 @@ export const SignUpDialog = ({ isOpen, setIsOpen, onClose }: Props) => {
                     )}
                   </div>
                   <div className="items-center gap-4">
-                    <Label htmlFor="password" className="">
-                      パスワード
-                    </Label>
+                    <Label htmlFor="password">パスワード</Label>
                     <PasswordInput form={form} name="password" />
                   </div>
                   <div className="items-center gap-4">
-                    <Label htmlFor="password_confirmation" className="">
+                    <Label htmlFor="password_confirmation">
                       確認用パスワード
                     </Label>
                     <PasswordInput form={form} name="password_confirmation" />

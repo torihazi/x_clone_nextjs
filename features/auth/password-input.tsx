@@ -1,8 +1,10 @@
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
-import { UseFormReturn, FieldValues, Path } from "react-hook-form";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+
+import type { UseFormReturn, FieldValues, Path } from "react-hook-form";
 
 type Props<T extends FieldValues> = {
   form: UseFormReturn<T>;

@@ -1,10 +1,11 @@
-import { Button } from "@/components/ui/button";
 import { Separator } from "@radix-ui/react-separator";
 import { Apple, Radius } from "lucide-react";
 import Image from "next/image";
-import { useDisclosure } from "@/hooks/use-disclosure";
-import { SignUpDialog } from "@/features/auth/sign-up-dialog";
+
+import { Button } from "@/components/ui/button";
 import { SignInDialog } from "@/features/auth/sign-in-dialog";
+import { SignUpDialog } from "@/features/auth/sign-up-dialog";
+import { useDisclosure } from "@/hooks/use-disclosure";
 
 export default function Auth() {
   const {
@@ -89,8 +90,8 @@ export default function Auth() {
           </div>
         </div>
         {/* フッター */}
-        <div className="">
-          <div className="font-sm text-gray-500">
+        <div>
+          <div className="text-sm text-gray-500">
             基本情報 Xアプリをダウンロード ヘルプセンター 利用規約
             プライバシーポリシー Cookieのポリシー アクセシビリティ 広告情報
             ブログ 採用情報 ブランドリソース 広告 マーケティング Xのビジネス活用
