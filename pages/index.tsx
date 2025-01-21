@@ -1,11 +1,9 @@
-import { Inter } from "next/font/google";
-
-const inter = Inter({ subsets: ["latin"] });
+import MainLayout from "@/components/layouts/main-layout";
 
 export default function Home() {
   return (
-    <div>
-      <div>ツイート一覧</div>
-    </div>
+    <MainLayout>
+      <div>Home</div>
+    </MainLayout>
   );
 }
