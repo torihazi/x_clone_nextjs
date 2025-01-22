@@ -1,5 +1,11 @@
+
+
+import Image from "next/image";
+import { ReactNode } from "react";
+
 import MainLayout from "@/components/layouts/main-layout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import MainTweetForm from "@/features/home/main-tweet-form";
 
 const commonClasses = `
   grow
@@ -13,6 +19,11 @@ const commonClasses = `
   data-[state=active]:border-b-2
   data-[state=active]:border-b-[#1d9bf0]
 `;
+
+export type inputIconItemType = {
+  icon: ReactNode;
+  tooltip: string;
+};
 
 export default function Home() {
   return (
@@ -35,12 +46,17 @@ export default function Home() {
           </TabsList>
           <TabsContent value="for-you" className="mt-0 h-full">
             <div className="flex flex-col">
-              {/* form */}
-              <div className="flex border-x border-gray-800 px-2 py-1">
-                <div></div>
-                <div className="flex flex-col">
-                  <div></div>
-                  <div></div>
+              <div className="flex border-x border-gray-800 px-8 py-1">
+                <div className="mr-2">
+                  <Image
+                    src="/logo-white.png"
+                    alt="logo"
+                    width={20}
+                    height={20}
+                  />
+                </div>
+                <div className="flex grow flex-col">
+                  <MainTweetForm />
                 </div>
               </div>
 
