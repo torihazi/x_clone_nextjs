@@ -1,12 +1,27 @@
-import { Button } from "@/components/ui/button";
 import { Separator } from "@radix-ui/react-separator";
 import { Apple, Radius } from "lucide-react";
 import Image from "next/image";
-import { useDisclosure } from "@/hooks/use-disclosure";
-import { SignUpDialog } from "@/features/auth/sign-up-dialog";
-export default function Auth() {
-  const { isOpen, setIsOpen, open, close, toggle } = useDisclosure();
 
+import { Button } from "@/components/ui/button";
+import { SignInDialog } from "@/features/auth/sign-in-dialog";
+import { SignUpDialog } from "@/features/auth/sign-up-dialog";
+import { useDisclosure } from "@/hooks/use-disclosure";
+
+export default function Auth() {
+  const {
+    isOpen: isOpenSignUp,
+    setIsOpen: setIsOpenSignUp,
+    open: openSignUp,
+    close: closeSignUp,
+    toggle: toggleSignUp,
+  } = useDisclosure();
+  const {
+    isOpen: isOpenSignIn,
+    setIsOpen: setIsOpenSignIn,
+    open: openSignIn,
+    close: closeSignIn,
+    toggle: toggleSignIn,
+  } = useDisclosure();
   return (
     <>
       <div className="flex h-screen flex-col">
@@ -48,8 +63,8 @@ export default function Auth() {
                   </Separator>
                   <Button
                     className="w-[300px] rounded-full bg-sky-500 font-bold hover:bg-sky-600"
-                    onClick={open}
                     aria-label="メールアドレスで登録"
+                    onClick={openSignUp}
                   >
                     メールアドレスで登録
                   </Button>
@@ -63,8 +78,9 @@ export default function Auth() {
                   </p>
                   <Button
                     variant="secondary"
-                    className="w-[300px] rounded-full font-bold text-sky-500"
                     aria-label="ログイン"
+                    className="w-[300px] rounded-full font-bold text-sky-500"
+                    onClick={openSignIn}
                   >
                     ログイン
                   </Button>
@@ -74,8 +90,8 @@ export default function Auth() {
           </div>
         </div>
         {/* フッター */}
-        <div className="">
-          <div className="font-sm text-gray-500">
+        <div>
+          <div className="text-sm text-gray-500">
             基本情報 Xアプリをダウンロード ヘルプセンター 利用規約
             プライバシーポリシー Cookieのポリシー アクセシビリティ 広告情報
             ブログ 採用情報 ブランドリソース 広告 マーケティング Xのビジネス活用
@@ -85,7 +101,16 @@ export default function Auth() {
       </div>
 
       {/* ダイアログ */}
-      <SignUpDialog isOpen={isOpen} setIsOpen={setIsOpen} onClose={close} />
+      <SignUpDialog
+        isOpen={isOpenSignUp}
+        setIsOpen={setIsOpenSignUp}
+        onClose={closeSignUp}
+      />
+      <SignInDialog
+        isOpen={isOpenSignIn}
+        setIsOpen={setIsOpenSignIn}
+        onClose={closeSignIn}
+      />
     </>
   );
 }

@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { X } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
@@ -8,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { signUp, SignUpFormSchema, SignUpForm } from "@/lib/api/auth";
+import { SignInSchema, SignInSchemaType, signIn } from "@/lib/api/auth";
 
 import { PasswordInput } from "./password-input";
 
@@ -18,23 +19,24 @@ type Props = {
   onClose: () => void;
 };
 
-export const SignUpDialog = ({ isOpen, setIsOpen, onClose }: Props) => {
-  const form = useForm<SignUpForm>({
-    resolver: zodResolver(SignUpFormSchema),
+export const SignInDialog = ({ isOpen, setIsOpen, onClose }: Props) => {
+  const router = useRouter();
+  const form = useForm<SignInSchemaType>({
+    resolver: zodResolver(SignInSchema),
     defaultValues: {
       email: "",
       password: "",
-      password_confirmation: "",
     },
   });
 
-  const onSubmit: SubmitHandler<SignUpForm> = async (data) => {
+  const onSubmit: SubmitHandler<SignInSchemaType> = async (data) => {
     try {
-      const response = await signUp(data);
-      toast.success("認証メールを送信しました");
+      const response = await signIn(data);
+      router.push("/");
+      toast.success("ログインしました");
       console.log(response);
     } catch (error) {
-      toast.error("アカウント作成に失敗しました");
+      toast.error("ログインに失敗しました");
     }
   };
 
@@ -47,7 +49,7 @@ export const SignUpDialog = ({ isOpen, setIsOpen, onClose }: Props) => {
             <Button
               size="icon"
               variant="ghost"
-              className="rounded-full p-1 "
+              className="rounded-full p-1"
               aria-label="閉じる"
               onClick={onClose}
             >
@@ -64,7 +66,7 @@ export const SignUpDialog = ({ isOpen, setIsOpen, onClose }: Props) => {
               onSubmit={form.handleSubmit(onSubmit)}
               className="flex grow flex-col gap-5 text-foreground"
             >
-              <div className="text-3xl font-bold">アカウントを作成</div>
+              <div className="text-3xl font-bold">ログイン</div>
               <div className="flex grow flex-col justify-between gap-4">
                 <div className="flex flex-col gap-8">
                   <div className="items-center gap-4">
@@ -84,23 +86,14 @@ export const SignUpDialog = ({ isOpen, setIsOpen, onClose }: Props) => {
                     <Label htmlFor="password">パスワード</Label>
                     <PasswordInput form={form} name="password" />
                   </div>
-                  <div className="items-center gap-4">
-                    <Label htmlFor="password_confirmation">
-                      確認用パスワード
-                    </Label>
-                    <PasswordInput form={form} name="password_confirmation" />
-                  </div>
-                  <div className="text-sm text-gray-500">
-                    アカウントを登録することにより、利用規約とプライバシーポリシー（Cookieの使用を含む）に同意したとみなされます。
-                  </div>
                 </div>
                 <div className="mb-8 flex items-center justify-center">
                   <Button
                     className="w-[300px] rounded-full bg-sky-500 font-bold hover:bg-sky-600"
-                    onClick={() => form.handleSubmit(onSubmit)}
-                    aria-label="アカウントを作成"
+                    aria-label="ログイン"
+                    type="submit"
                   >
-                    アカウントを作成
+                    ログイン
                   </Button>
                 </div>
               </div>

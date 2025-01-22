@@ -1,8 +1,10 @@
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
-import { UseFormReturn, FieldValues, Path } from "react-hook-form";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+
+import type { UseFormReturn, FieldValues, Path } from "react-hook-form";
 
 type Props<T extends FieldValues> = {
   form: UseFormReturn<T>;
@@ -23,6 +25,7 @@ export const PasswordInput = <T extends FieldValues>({
         />
         <Button
           size="icon"
+          type="button"
           variant="ghost"
           className="absolute right-1 top-1/2 -translate-y-1/2 rounded-full"
           aria-label={isVisible ? "パスワードを非表示" : "パスワードを表示"}
