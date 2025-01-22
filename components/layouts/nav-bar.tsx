@@ -41,7 +41,7 @@ export default function NavBar() {
   ];
 
   return (
-    <div className="flex h-full flex-col justify-between px-2 lg:w-[225px]">
+    <>
       <div className="flex flex-col items-start gap-5">
         <Button variant="ghost" className="rounded-full p-2">
           <Image src="/logo-white.png" alt="logo" width={30} height={30} />
@@ -67,6 +67,6 @@ export default function NavBar() {
           hgoehgoe
         </Button>
       </div>
-    </div>
+    </>
   );
 }
