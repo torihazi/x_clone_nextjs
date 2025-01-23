@@ -1,5 +1,3 @@
-
-
 import Image from "next/image";
 import { ReactNode } from "react";
 
@@ -46,6 +44,23 @@ export default function Home() {
           </TabsList>
           <TabsContent value="for-you" className="mt-0 h-full">
             <div className="flex flex-col">
+              <div className="flex border-x border-b border-gray-800 px-8 py-1">
+                <div className="mr-2 mt-2">
+                  <Image
+                    src="/logo-white.png"
+                    alt="logo"
+                    width={20}
+                    height={20}
+                  />
+                </div>
+                <div className="flex grow flex-col">
+                  <MainTweetForm />
+                </div>
+              </div>
+            </div>
+          </TabsContent>
+          <TabsContent value="following" className="mt-0 h-full">
+            <div className="flex flex-col">
               <div className="flex border-x border-gray-800 px-8 py-1">
                 <div className="mr-2">
                   <Image
@@ -59,22 +74,7 @@ export default function Home() {
                   <MainTweetForm />
                 </div>
               </div>
-
-              <div className="h-40 border border-gray-800 px-2 py-1">hgoe</div>
-              <div className="h-40 border border-gray-800 px-2 py-1">hgoe</div>
-              <div className="h-40 border border-gray-800 px-2 py-1">hgoe</div>
-              <div className="h-40 border border-gray-800 px-2 py-1">hgoe</div>
-              <div className="h-40 border border-gray-800 px-2 py-1">hgoe</div>
-              <div className="h-40 border border-gray-800 px-2 py-1">hgoe</div>
-              <div className="h-40 border border-gray-800 px-2 py-1">hgoe</div>
-              <div className="h-40 border border-gray-800 px-2 py-1">hgoe</div>
-              <div className="h-40 border border-gray-800 px-2 py-1">hgoe</div>
-              <div className="h-40 border border-gray-800 px-2 py-1">hgoe</div>
-              <div className="h-40 border border-gray-800 px-2 py-1">hgoe</div>
             </div>
-          </TabsContent>
-          <TabsContent value="following" className="mt-0 h-full">
-            <div className="border-x border-gray-800 px-2 py-1">hoge</div>
           </TabsContent>
         </Tabs>
       </div>

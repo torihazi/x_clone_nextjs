@@ -1,53 +1,33 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Videotape,
-  List,
-  Smile,
-  Calendar,
-  MapPin,
-  Image as ImageIcon,
-  X,
-} from "lucide-react";
+import { useAtom } from "jotai";
+import { Image as ImageIcon, X } from "lucide-react";
+import Image from "next/image";
+import { ChangeEvent, useCallback, useEffect, useRef } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { type TweetForm, TweetFormSchema } from "@/lib/api/tweet";
-import { ChangeEvent, useCallback, useEffect, useRef } from "react";
-import { useAtom } from "jotai";
+import {
+  type TweetForm,
+  TweetFormSchema,
+  useCreateTweet,
+} from "@/lib/api/tweet";
+
 import { fileUrlAtom } from "../jotai/file-url-atom";
-import Image from "next/image";
-export type inputIconItemType = {
-  icon: React.ReactNode;
-  tooltip: string;
-};
-export const inputIconItems: inputIconItemType[] = [
-  {
-    icon: <Videotape className="text-[#1C9BEF]" />,
-    tooltip: "Gif",
-  },
-  {
-    icon: <List className="text-[#1C9BEF]" />,
-    tooltip: "Poll",
-  },
-  {
-    icon: <Smile className="text-[#1C9BEF]" />,
-    tooltip: "Emoji",
-  },
-  {
-    icon: <Calendar className="text-[#1C9BEF]" />,
-    tooltip: "Schedule",
-  },
-  {
-    icon: <MapPin className="text-[#1C9BEF]" />,
-    tooltip: "Geo",
-  },
-];
+
+import { inputIconItems } from "./input-icon-items";
+import { toast } from "react-toastify";
 
 export default function MainTweetForm() {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const [currentUrls, setCurrentUrls] = useAtom(fileUrlAtom);
+  const { createTweet, isLoading } = useCreateTweet({
+    onSuccess: () => {
+      toast.success("ツイートを作成しました");
+      form.reset();
+    },
+  });
 
   const form = useForm<TweetForm>({
     resolver: zodResolver(TweetFormSchema),
@@ -61,8 +41,18 @@ export default function MainTweetForm() {
   const { ref: imagesRef, ...restImagesInput } = form.register("images");
   const { ref: contentRef, ...restContentInput } = form.register("content");
 
-  const onSubmit: SubmitHandler<TweetForm> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<TweetForm> = async (data) => {
+    try {
+      // 画像があった場合 APIroutesを使用してpresigned urlを取得
+      // 取得したpresigned urlを使用してs3に画像をアップロード
+      // アップロードした画像のs3_keyを取得
+      // 取得したs3_key(string[])とcontentをAPIに送信
+
+      // まずはtextだけ送信してみる
+      await createTweet({ content: data.content });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -96,13 +86,10 @@ export default function MainTweetForm() {
       } else {
         // バリデーション失敗時は値をリセット
         form.setValue("images", currentFiles || []);
-        // HandleFormError(form.formState.errors.images?.message as string);
       }
     }
   };
 
-  // TODO: このtriggerの書き方だと意味ないと思う。
-  // コメントアウトしたものが相応しいかと思うがそれだとrecoilが更新されない。
   const removeFiles = (currentUrl: string, index: number) => {
     const files = form.getValues("images");
     if (files) {
@@ -132,9 +119,6 @@ export default function MainTweetForm() {
     adjustHeight();
   }, []);
 
-  const result = TweetFormSchema.safeParse(form.getValues());
-  console.log(result);
-
   return (
     <form onSubmit={form.handleSubmit(onSubmit)}>
       <div className="border-b border-gray-800">
@@ -154,21 +138,21 @@ export default function MainTweetForm() {
         />
 
         {/* 画像プレビュー挿入 */}
-        <div className="flex overflow-x-auto gap-2">
+        <div className="flex gap-2 overflow-x-auto">
           {currentUrls.length > 0 &&
             currentUrls.map((url, index) => (
-              <div key={url} className="shrink-0 relative">
+              <div key={url} className="relative shrink-0">
                 <Image
                   alt={`画像${index}枚目`}
-                  className="object-cover aspect-square rounded-lg"
-                  src={`${url}`}
+                  className="aspect-square rounded-lg object-cover"
+                  src={url}
                   width={`${currentUrls.length === 1 ? 300 : 200}`}
                   height={`${currentUrls.length === 1 ? 300 : 200}`}
                 />
                 <Button
                   variant="outline"
                   size="icon"
-                  className="absolute top-1 right-1 z-10 rounded-full"
+                  className="absolute right-1 top-1 z-10 rounded-full"
                   onClick={() => removeFiles(url, index)}
                 >
                   <X />
