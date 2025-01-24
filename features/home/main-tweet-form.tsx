@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useAtom } from "jotai";
 import { Image as ImageIcon, X } from "lucide-react";
 import Image from "next/image";
-import { ChangeEvent, useCallback, useEffect, useRef } from "react";
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
@@ -17,12 +17,14 @@ import { fileUrlAtom } from "../jotai/file-url-atom";
 
 import { inputIconItems } from "./input-icon-items";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 export default function MainTweetForm() {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const [currentUrls, setCurrentUrls] = useAtom(fileUrlAtom);
-  const { createTweet, isLoading } = useCreateTweet({
+  const [isLoading, setIsLoading] = useState(false);
+  const { createTweet } = useCreateTweet({
     onSuccess: () => {
       toast.success("ツイートを作成しました");
       form.reset();
@@ -43,15 +45,51 @@ export default function MainTweetForm() {
 
   const onSubmit: SubmitHandler<TweetForm> = async (data) => {
     try {
+      setIsLoading(true);
       // 画像があった場合 APIroutesを使用してpresigned urlを取得
-      // 取得したpresigned urlを使用してs3に画像をアップロード
-      // アップロードした画像のs3_keyを取得
-      // 取得したs3_key(string[])とcontentをAPIに送信
+      // TODO: data.imagesを渡したらs3Keyの配列を返すhookを作成
+      if (data.images && data.images.length > 0) {
+        const results = await Promise.all(
+          data.images.map(async (image) => {
+            const response = await axios.post("/api/generate-presigned-url", {
+              fileName: image.name,
+              fileType: image.type,
+            });
+            return {
+              image: image,
+              url: response.data.url,
+              s3Key: response.data.s3Key,
+            };
+          }),
+        );
 
-      // まずはtextだけ送信してみる
-      await createTweet({ content: data.content });
+        // 取得したpresigned urlを使用してs3に画像をアップロード
+        const uploadResults: string[] = await Promise.all(
+          results.map(async (result) => {
+            await axios.put(result.url, result.image, {
+              headers: {
+                "Content-Type": result.image.type,
+              },
+            });
+            return result.s3Key;
+          }),
+        );
+
+        console.log(uploadResults);
+
+        // アップロードした画像のs3_keyを取得
+        // 取得したs3_key(string[])とcontentをAPIに送信
+        await createTweet({ content: data.content, s3_keys: uploadResults });
+      } else {
+        // 画像がなかった場合はcontentだけ送信
+        await createTweet({ content: data.content });
+      }
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false);
+      setCurrentUrls([]);
+      form.reset();
     }
   };
 
@@ -76,7 +114,7 @@ export default function MainTweetForm() {
       const combinedFiles = [...(currentFiles || []), ...newFiles];
 
       // 先にバリデーションを実行
-      form.setValue("images", combinedFiles, { shouldDirty: true });
+      form.setValue("images", combinedFiles);
       const result = await form.trigger("images");
 
       if (result) {
@@ -96,7 +134,6 @@ export default function MainTweetForm() {
       form.setValue(
         "images",
         files?.filter((_, num) => num !== index),
-        { shouldDirty: true },
       );
       URL.revokeObjectURL(currentUrl);
       setCurrentUrls(currentUrls.filter((url) => url !== currentUrl));
@@ -208,9 +245,9 @@ export default function MainTweetForm() {
           <Button
             type="submit"
             className="rounded-full font-bold"
-            disabled={!form.formState.isValid}
+            disabled={!form.formState.isValid || isLoading}
           >
-            Post
+            {isLoading ? "Posting..." : "Post"}
           </Button>
         </div>
       </div>

@@ -60,7 +60,7 @@ export type TweetForm = z.infer<typeof TweetFormSchema>;
 
 export async function createTweet(
   url: string,
-  { arg }: { arg: { content?: string; s3_key?: string[] } },
+  { arg }: { arg: { content?: string; s3_keys?: string[] } },
 ) {
   await apiClient.post(url, arg);
 }
