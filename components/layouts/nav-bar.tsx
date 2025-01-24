@@ -43,11 +43,16 @@ export default function NavBar() {
   return (
     <>
       <div className="flex flex-col items-start gap-5">
-        <Button variant="ghost" className="rounded-full p-2">
+        <Button
+          variant="ghost"
+          className="rounded-full p-2"
+          aria-label="ホーム"
+        >
           <Image src="/logo-white.png" alt="logo" width={30} height={30} />
         </Button>
         {columns.map((column) => (
           <Button
+            aria-label={column.title}
             variant="ghost"
             className="text-md gap-4 rounded-full p-1 font-bold"
             key={column.title}
@@ -57,12 +62,19 @@ export default function NavBar() {
             {column.title}
           </Button>
         ))}
-        <Button className="text-md w-full gap-4 rounded-full px-3 font-bold">
+        <Button
+          aria-label="ツイート"
+          className="text-md w-full gap-4 rounded-full px-3 font-bold"
+        >
           POST
         </Button>
       </div>
       <div className="flex flex-col items-start justify-start">
-        <Button variant="ghost" className="gap-4 rounded-full p-1">
+        <Button
+          aria-label="ユーザー"
+          variant="ghost"
+          className="gap-4 rounded-full p-1"
+        >
           <User className="size-7" />
           hgoehgoe
         </Button>
