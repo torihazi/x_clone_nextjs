@@ -24,6 +24,7 @@ apiClient.interceptors.request.use((config) => {
 // レスポンスインターセプター
 apiClient.interceptors.response.use(
   (response) => {
+    // devise-token-authはリクエストごとにトークンを更新するため、レスポンスヘッダーからトークンを取得
     const token = response.headers["access-token"];
     const client = response.headers["client"];
     const uid = response.headers["uid"];

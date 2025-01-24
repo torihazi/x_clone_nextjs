@@ -1,7 +1,6 @@
 import { type AxiosResponse } from "axios";
 import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
-
 import { z } from "zod";
 
 import {
@@ -60,7 +59,7 @@ export type TweetForm = z.infer<typeof TweetFormSchema>;
 
 export async function createTweet(
   url: string,
-  { arg }: { arg: { content?: string; s3_keys?: string[] } },
+  { arg }: { arg: { content?: string; s3Keys?: string[] } },
 ) {
   await apiClient.post(url, arg);
 }

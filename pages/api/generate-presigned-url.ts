@@ -1,6 +1,6 @@
-import { NextApiRequest, NextApiResponse } from "next";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { NextApiRequest, NextApiResponse } from "next";
 
 const s3Client = new S3Client({
   region: process.env.AWS_REGION!,
@@ -15,14 +15,13 @@ export default async function handler(
   res: NextApiResponse,
 ) {
   try {
-    const { fileName, fileType } = req.body;
+    const { fileName, fileType, type } = req.body;
     const bucketName = process.env.AWS_BUCKET_NAME!;
-    // TODO: tweetの部分をreq.bodyから渡せるようにして汎用化
-    const s3Key = `tweet/${Math.random().toString(36).substring(2, 15)}_${fileName}`;
+    const s3Key = `${Math.random().toString(36).substring(2, 15)}_${fileName}`;
 
     const params = {
       Bucket: bucketName,
-      Key: s3Key,
+      Key: `${type}/${s3Key}`,
       ContentType: fileType,
     };
 

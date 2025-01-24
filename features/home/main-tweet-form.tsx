@@ -4,9 +4,11 @@ import { Image as ImageIcon, X } from "lucide-react";
 import Image from "next/image";
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { useS3Upload } from "@/hooks/use-s3-upload";
 import {
   type TweetForm,
   TweetFormSchema,
@@ -16,14 +18,14 @@ import {
 import { fileUrlAtom } from "../jotai/file-url-atom";
 
 import { inputIconItems } from "./input-icon-items";
-import { toast } from "react-toastify";
-import axios from "axios";
 
 export default function MainTweetForm() {
+  // 独自のDOM操作を行うためのref
   const inputRef = useRef<HTMLInputElement | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const [currentUrls, setCurrentUrls] = useAtom(fileUrlAtom);
   const [isLoading, setIsLoading] = useState(false);
+  const { upload } = useS3Upload();
   const { createTweet } = useCreateTweet({
     onSuccess: () => {
       toast.success("ツイートを作成しました");
@@ -46,46 +48,15 @@ export default function MainTweetForm() {
   const onSubmit: SubmitHandler<TweetForm> = async (data) => {
     try {
       setIsLoading(true);
-      // 画像があった場合 APIroutesを使用してpresigned urlを取得
-      // TODO: data.imagesを渡したらs3Keyの配列を返すhookを作成
       if (data.images && data.images.length > 0) {
-        const results = await Promise.all(
-          data.images.map(async (image) => {
-            const response = await axios.post("/api/generate-presigned-url", {
-              fileName: image.name,
-              fileType: image.type,
-            });
-            return {
-              image: image,
-              url: response.data.url,
-              s3Key: response.data.s3Key,
-            };
-          }),
-        );
-
-        // 取得したpresigned urlを使用してs3に画像をアップロード
-        const uploadResults: string[] = await Promise.all(
-          results.map(async (result) => {
-            await axios.put(result.url, result.image, {
-              headers: {
-                "Content-Type": result.image.type,
-              },
-            });
-            return result.s3Key;
-          }),
-        );
-
-        console.log(uploadResults);
-
-        // アップロードした画像のs3_keyを取得
-        // 取得したs3_key(string[])とcontentをAPIに送信
-        await createTweet({ content: data.content, s3_keys: uploadResults });
+        const s3Keys = await upload(data.images, "tweet");
+        await createTweet({ content: data.content, s3Keys: s3Keys });
       } else {
-        // 画像がなかった場合はcontentだけ送信
         await createTweet({ content: data.content });
       }
     } catch (error) {
       console.error(error);
+      toast.error("ツイートの作成に失敗しました");
     } finally {
       setIsLoading(false);
       setCurrentUrls([]);
@@ -128,17 +99,26 @@ export default function MainTweetForm() {
     }
   };
 
-  const removeFiles = (currentUrl: string, index: number) => {
-    const files = form.getValues("images");
-    if (files) {
-      form.setValue(
-        "images",
-        files?.filter((_, num) => num !== index),
-      );
-      URL.revokeObjectURL(currentUrl);
-      setCurrentUrls(currentUrls.filter((url) => url !== currentUrl));
+  const removeFiles = async (currentUrl: string, index: number) => {
+    const currentFiles = form.getValues("images");
+    if (!currentFiles) return;
 
-      form.trigger("images");
+    form.setValue(
+      "images",
+      currentFiles.filter((_, num) => num !== index),
+    );
+    URL.revokeObjectURL(currentUrl);
+    setCurrentUrls(currentUrls.filter((url) => url !== currentUrl));
+    // バリデーションを実行
+    const result = await form.trigger("images");
+
+    if (result) {
+      // バリデーション成功時のみURLを更新
+      const urls = currentFiles.map((file) => URL.createObjectURL(file));
+      setCurrentUrls(currentUrls.filter((url) => url !== currentUrl));
+    } else {
+      // バリデーション失敗時は値をリセット
+      form.setValue("images", currentFiles || []);
     }
   };
 
@@ -187,6 +167,7 @@ export default function MainTweetForm() {
                   height={`${currentUrls.length === 1 ? 300 : 200}`}
                 />
                 <Button
+                  aria-label="画像削除"
                   variant="outline"
                   size="icon"
                   className="absolute right-1 top-1 z-10 rounded-full"
@@ -211,6 +192,7 @@ export default function MainTweetForm() {
       <div className="flex justify-between py-2">
         <div>
           <Button
+            aria-label="画像追加"
             type="button"
             size="icon"
             className="rounded-full bg-transparent p-1 hover:bg-current"
@@ -233,6 +215,7 @@ export default function MainTweetForm() {
           />
           {inputIconItems.map((item) => (
             <Button
+              aria-label={item.tooltip}
               key={item.tooltip}
               size="icon"
               className="rounded-full bg-transparent p-1 hover:bg-current "
@@ -243,6 +226,7 @@ export default function MainTweetForm() {
         </div>
         <div>
           <Button
+            aria-label="ツイート"
             type="submit"
             className="rounded-full font-bold"
             disabled={!form.formState.isValid || isLoading}
