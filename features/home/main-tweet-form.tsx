@@ -21,7 +21,6 @@ import { inputIconItems } from "./input-icon-items";
 
 export default function MainTweetForm() {
   // 独自のDOM操作を行うためのref
-  const inputRef = useRef<HTMLInputElement | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const [currentUrls, setCurrentUrls] = useAtom(fileUrlAtom);
   const [isLoading, setIsLoading] = useState(false);
@@ -41,7 +40,6 @@ export default function MainTweetForm() {
     },
   });
 
-  const { ref: imagesRef, ...restImagesInput } = form.register("images");
   const { ref: contentRef, ...restContentInput } = form.register("content");
 
   const onSubmit: SubmitHandler<TweetForm> = async (data) => {
@@ -195,21 +193,17 @@ export default function MainTweetForm() {
             type="button"
             size="icon"
             className="rounded-full bg-transparent p-1 hover:bg-current"
-            onClick={() => inputRef.current?.click()}
+            onClick={() => document.getElementById("image-input")?.click()}
           >
             {/* eslint-disable-next-line jsx-a11y/alt-text */}
             <ImageIcon className="text-[#1C9BEF]" />
           </Button>
           <input
-            ref={(el) => {
-              imagesRef(el);
-              inputRef.current = el;
-            }}
+            id="image-input"
             type="file"
             multiple
             className="hidden"
             accept="image/png, image/jpeg, image/jpg"
-            {...restImagesInput}
             onChange={addFiles}
           />
           {inputIconItems.map((item) => (
