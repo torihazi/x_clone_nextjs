@@ -54,7 +54,7 @@ export const SignUpDialog = ({ isOpen, setIsOpen, onClose }: Props) => {
               <X className="size-10 text-foreground" />
             </Button>
             <div className="flex flex-1 justify-center">
-              <Image src="/logo-black.png" alt="logo" width={30} height={30} />
+              <Image src="/logo-white.png" alt="logo" width={30} height={30} />
             </div>
             <div></div>
           </div>

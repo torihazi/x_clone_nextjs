@@ -43,16 +43,14 @@ export default function Auth() {
               <div className="flex flex-1 grow flex-col justify-between gap-2">
                 <div className="flex flex-col gap-2">
                   <Button
-                    variant="secondary"
-                    className="w-[300px] rounded-full font-bold"
+                    className="w-[300px] rounded-full bg-white font-bold text-black"
                     aria-label="Googleで登録"
                   >
                     <Radius className="size-4" />
                     Google
                   </Button>
                   <Button
-                    variant="secondary"
-                    className="w-[300px] rounded-full font-bold"
+                    className="w-[300px] rounded-full bg-white font-bold text-black"
                     aria-label="Appleで登録"
                   >
                     <Apple className="size-4" />
