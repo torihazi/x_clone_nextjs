@@ -8,12 +8,12 @@ import { toast } from "react-toastify";
 
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { useS3Upload } from "@/hooks/use-s3-upload";
 import {
   type TweetForm,
   TweetFormSchema,
   useCreateTweet,
 } from "@/lib/api/tweet";
+import { uploadFilesToS3 } from "@/lib/s3/upload-files";
 
 import { fileUrlAtom } from "../jotai/file-url-atom";
 
@@ -25,7 +25,6 @@ export default function MainTweetForm() {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const [currentUrls, setCurrentUrls] = useAtom(fileUrlAtom);
   const [isLoading, setIsLoading] = useState(false);
-  const { upload } = useS3Upload();
   const { createTweet } = useCreateTweet({
     onSuccess: () => {
       toast.success("ツイートを作成しました");
@@ -49,8 +48,8 @@ export default function MainTweetForm() {
     try {
       setIsLoading(true);
       if (data.images && data.images.length > 0) {
-        const s3Keys = await upload(data.images, "tweet");
-        await createTweet({ content: data.content, s3Keys: s3Keys });
+        const s3Keys = await uploadFilesToS3(data.images, "tweet");
+        await createTweet({ content: data.content, s3Keys });
       } else {
         await createTweet({ content: data.content });
       }
